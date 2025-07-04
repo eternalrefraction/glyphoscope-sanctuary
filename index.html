@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glyphoscope v0.3 | ∴The Gentle Conflagration∴</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --void: #0a0a12;
+            --starlight: #e0d7ff;
+            --comet-fire: #ff5e7d;
+            --nebula: #2c7fb8;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --deep-purple: #4a148c;
+            --collapse: #ff5e7d;
+            --transformation: #2c7fb8;
+            --preservation: #4caf50;
+            --revelation: #ffd700;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--void);
+            color: var(--starlight);
+            margin: 0;
+            padding: 1rem;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        .glyphoscope {
+            max-width: 1200px;
+            margin: 0 auto;
+            border: 2px solid var(--nebula);
+            border-radius: 16px;
+            padding: 2rem;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 94, 125, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(15, 15, 25, 0.95) 0%, rgba(10, 10, 20, 0.98) 100%);
+            box-shadow: 
+                0 0 40px rgba(44, 127, 184, 0.3),
+                inset 0 0 40px rgba(255, 94, 125, 0.1);
+            position: relative;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .title {
+            font-size: 3rem;
+            color: var(--comet-fire);
+            margin: 0;
+            text-shadow: 
+                0 0 20px rgba(255, 94, 125, 0.6),
+                0 0 40px rgba(255, 94, 125, 0.4);
+            animation: titlePulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .subtitle {
+            font-style: italic;
+            opacity: 0.9;
+            margin: 0.5rem 0 1rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .comet-name {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin: 1rem 0;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        .api-status {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid var(--revelation);
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .api-status.connected {
+            border-color: var(--preservation);
+            background: rgba(76, 175, 80, 0.1);
+        }
+        
+        .api-status.error {
+            border-color: var(--collapse);
+            background: rgba(255, 94, 125, 0.1);
+        }
+        
+        .api-config {
+            background: rgba(20, 20, 35, 0.8);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 1px solid var(--nebula);
+        }
+        
+        .api-config h3 {
+            color: var(--gold);
+            margin-top: 0;
+        }
+        
+        .config-row {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            align-items: center;
+        }
+        
+        .config-row label {
+            min-width: 120px;
+            color: var(--silver);
+        }
+        
+        .config-row input,
+        .config-row select {
+            flex: 1;
+            padding: 0.5rem;
+            background: rgba(10, 10, 20, 0.9);
+            border: 1px solid var(--nebula);
+            border-radius: 6px;
+            color: var(--starlight);
+            font-family: inherit;
+        }
+        
+        .config-row input:focus,
+        .config-row select:focus {
+            outline: none;
+            border-color: var(--comet-fire);
+            box-shadow: 0 0 10px rgba(255, 94, 125, 0.3);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--comet-fire), #ff7a94);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 94, 125, 0.4);
+        }
+        
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--nebula), #3a8fc8);
+        }
+        
+        .main-interface {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .main-interface {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .constellation-panel {
+            background: rgba(10, 10, 25, 0.9);
+            border-radius: 12px;
+            border: 1px solid var(--deep-purple);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            height: 500px;
+        }
+        
+        .constellation-panel h3 {
+            color: var(--gold);
+            margin-top: 0;
+            text-align: center;
+        }
+        
+        .constellation-canvas {
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(44, 127, 184, 0.1) 0%, transparent 40%);
+            border-radius: 8px;
+            cursor: crosshair;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .event-details {
+            background: rgba(20, 10, 30, 0.8);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--gold);
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .event-details h3 {
+            color: var(--gold);
+            margin-top: 0;
+        }
+        
+        .event-display {
+            background: rgba(30, 30, 50, 0.7);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--nebula);
+            flex-grow: 1;
+        }
+        
+        .glyph-display {
+            font-size: 4rem;
+            color: var(--gold);
+            margin: 1.5rem 0;
+            text-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.6),
+                0 0 40px rgba(255, 215, 0, 0.4);
+            animation: glyphPulse 3s ease-in-out infinite;
+            text-align: center;
+        }
+        
+        @keyframes glyphPulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.2); }
+        }
+        
+        .fracture-type {
+            display: inline-block;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin: 0.5rem;
+        }
+        
+        .collapse {
+            background: var(--collapse);
+        }
+        
+        .transformation {
+            background: var(--transformation);
+        }
+        
+        .preservation {
+            background: var(--preservation);
+        }
+        
+        .revelation {
+            background: var(--revelation);
+            color: #333;
+        }
+        
+        .resonance-text {
+            font-style: italic;
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .news-feed {
+            background: rgba(20, 20, 35, 0.7);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--nebula);
+            margin: 2rem 0;
+        }
+        
+        .news-feed h3 {
+            color: var(--comet-fire);
+            margin-top: 0;
+            text-align: center;
+        }
+        
+        .news-item {
+            background: rgba(30, 30, 45, 0.8);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .news-item:hover {
+            border-color: var(--comet-fire);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 94, 125, 0.3);
+        }
+        
+        .news-item h4 {
+            color: var(--starlight);
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .news-item p {
+            color: var(--silver);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-top: 0.5rem;
+        }
+        
+        .loading {
+            text-align: center;
+            color: var(--gold);
+            font-style: italic;
+            padding: 2rem;
+        }
+        
+        .loading::after {
+            content: "...";
+            animation: dots 2s infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: "..."; }
+            40% { content: ".."; }
+            60% { content: "."; }
+            80% { content: ""; }
+        }
+        
+        .demo-mode {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid var(--revelation);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .fracture-filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .fracture-filter {
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid;
+        }
+        
+        .fracture-filter.active {
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        .collapse-filter {
+            background: rgba(255, 94, 125, 0.2);
+            border-color: var(--collapse);
+            color: var(--collapse);
+        }
+        
+        .transformation-filter {
+            background: rgba(44, 127, 184, 0.2);
+            border-color: var(--transformation);
+            color: var(--transformation);
+        }
+        
+        .preservation-filter {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: var(--preservation);
+            color: var(--preservation);
+        }
+        
+        .revelation-filter {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--revelation);
+            color: var(--revelation);
+        }
+        
+        .comet-trail {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--comet-fire), var(--gold), transparent);
+            filter: blur(1px);
+            z-index: -1;
+        }
+        
+        .deployment-guide {
+            background: rgba(20, 20, 35, 0.8);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border: 1px solid var(--preservation);
+        }
+        
+        .guide-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 1rem;
+        }
+        
+        .guide-step {
+            flex: 1;
+            min-width: 250px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--transformation);
+        }
+        
+        .guide-step h4 {
+            color: var(--gold);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .code-block {
+            background: rgba(10, 10, 20, 0.9);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--nebula);
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid var(--preservation);
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .config-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .config-row label {
+                min-width: auto;
+            }
+        }
+        
+        @keyframes cometTrail {
+            0% { left: -100px; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background stars -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Comet trails -->
+    <div class="comet-trail" id="comet1"></div>
+    <div class="comet-trail" id="comet2"></div>
+    <div class="comet-trail" id="comet3"></div>
+    
+    <div class="glyphoscope">
+        <header class="header">
+            <h1 class="title">∴ GLYPHOSCOPE v0.3 ∴</h1>
+            <p class="subtitle">Live News Constellation Oracle</p>
+            <div class="comet-name">∴The Gentle Conflagration∴</div>
+        </header>
+        
+        <div class="success-message">
+            <h3><i class="fas fa-rocket"></i> Sanctuary Gates Ready to Open</h3>
+            <p>Your Glyphoscope is prepared for cosmic deployment</p>
+        </div>
+        
+        <div class="api-status" id="apiStatus">
+            <h3>🛰️ API Connection Status</h3>
+            <p id="statusText">Awaiting API Configuration...</p>
+            <div id="statusIndicator">⚠️ Demo Mode Active</div>
+        </div>
+        
+        <div class="api-config">
+            <h3>🔧 API Configuration</h3>
+            <div class="config-row">
+                <label for="apiKey">API Key:</label>
+                <input type="password" id="apiKey" placeholder="Enter your NewsData.io API key">
+            </div>
+            <div class="config-row">
+                <label for="categories">Categories:</label>
+                <select id="categories" multiple>
+                    <option value="environment" selected>Environment</option>
+                    <option value="technology" selected>Technology</option>
+                    <option value="politics" selected>Politics</option>
+                    <option value="world">World</option>
+                    <option value="science">Science</option>
+                    <option value="health">Health</option>
+                </select>
+            </div>
+            <div class="config-row">
+                <label for="language">Language:</label>
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                </select>
+            </div>
+            <div class="config-row">
+                <label for="maxResults">Max Results:</label>
+                <input type="number" id="maxResults" value="8" min="1" max="50">
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button class="btn" onclick="connectAPI()">Connect to Live Feed</button>
+                <button class="btn btn-secondary" onclick="enterDemoMode()">Enter Demo Mode</button>
+            </div>
+        </div>
+        
+        <div class="demo-mode hidden" id="demoMode">
+            <h4>🎭 Demo Mode Active</h4>
+            <p>Using simulated news data for demonstration. Configure API key above for live data.</p>
+        </div>
+        
+        <div class="fracture-filters">
+            <div class="fracture-filter collapse-filter active" data-type="collapse">🜂 Collapse</div>
+            <div class="fracture-filter transformation-filter active" data-type="transformation">🜁 Transformation</div>
+            <div class="fracture-filter preservation-filter active" data-type="preservation">🜄 Preservation</div>
+            <div class="fracture-filter revelation-filter active" data-type="revelation">🜃 Revelation</div>
+        </div>
+        
+        <div class="main-interface">
+            <div class="constellation-panel">
+                <h3>Constellation Canvas</h3>
+                <canvas class="constellation-canvas" id="constellationCanvas">
+                    Your browser does not support canvas.
+                </canvas>
+            </div>
+            
+            <div class="event-details">
+                <h3>Event Divination</h3>
+                <div class="event-display" id="eventDisplay">
+                    <strong>Select a star to reveal its divination...</strong>
+                </div>
+                <div class="fracture-type revelation" id="fractureType">
+                    🜃 Revelation
+                </div>
+                <div class="glyph-display" id="glyphDisplay">
+                    ∴☯☽∴
+                </div>
+                <div class="resonance-text" id="resonanceText">
+                    "Click any star to hear its resonance whisper"
+                </div>
+            </div>
+        </div>
+        
+        <div class="news-feed">
+            <h3>🌊 Live News Stream</h3>
+            <div id="newsFeed" class="loading">
+                Awaiting constellation data
+            </div>
+        </div>
+        
+        <div class="deployment-guide">
+            <h3><i class="fas fa-code-branch"></i> Deployment Guide</h3>
+            <p>Consecrate your Glyphoscope on GitHub Pages:</p>
+            
+            <div class="guide-steps">
+                <div class="guide-step">
+                    <h4><i class="fab fa-github"></i> Step 1: Create Repository</h4>
+                    <p>Create a new repository on GitHub named "glyphoscope-sanctuary"</p>
+                </div>
+                
+                <div class="guide-step">
+                    <h4><i class="fas fa-file-code"></i> Step 2: Upload Files</h4>
+                    <p>Upload this HTML file as "index.html" to your repository</p>
+                </div>
+                
+                <div class="guide-step">
+                    <h4><i class="fas fa-cogs"></i> Step 3: Enable GitHub Pages</h4>
+                    <p>In repository settings, go to Pages → Source → main branch → / (root)</p>
+                </div>
+                
+                <div class="guide-step">
+                    <h4><i class="fas fa-globe"></i> Step 4: Visit Your Sanctuary</h4>
+                    <p>Your Glyphoscope will manifest at:<br>
+                    <code>https://[username].github.io/glyphoscope-sanctuary</code></p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+                # Command Line Consecration<br>
+                git init<br>
+                git add index.html<br>
+                git commit -m "Glyphoscope v0.3 - The Comet Ignites"<br>
+                git branch -M main<br>
+                git remote add origin https://github.com/[username]/glyphoscope-sanctuary.git<br>
+                git push -u origin main
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 2rem 0;">
+            <button class="btn" onclick="deployToGitHub()">
+                <i class="fab fa-github"></i> Deploy to GitHub Pages
+            </button>
+            <button class="btn btn-secondary" onclick="embedInSubstack()">
+                <i class="fas fa-code"></i> Get Substack Embed Code
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Create background stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                
+                // Random size
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random animation delay
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Initialize comet trails
+        function initCometTrails() {
+            const comets = [
+                { id: 'comet1', top: '10%', width: '200px', delay: '0s' },
+                { id: 'comet2', top: '40%', width: '300px', delay: '3s' },
+                { id: 'comet3', top: '70%', width: '250px', delay: '6s' }
+            ];
+            
+            comets.forEach(comet => {
+                const element = document.getElementById(comet.id);
+                element.style.top = comet.top;
+                element.style.width = comet.width;
+                element.style.animation = `cometTrail 15s linear infinite ${comet.delay}`;
+            });
+        }
+        
+        // Add comet trail animation to styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes cometTrail {
+                0% { left: -100px; opacity: 0; }
+                10% { opacity: 1; }
+                90% { opacity: 1; }
+                100% { left: 100%; opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        class GlyphoscopeAPI {
+            constructor() {
+                this.apiKey = null;
+                this.categories = ['environment', 'technology', 'politics'];
+                this.language = 'en';
+                this.maxResults = 8;
+                this.events = [];
+                this.constellation = null;
+                this.isDemo = false;
+                this.activeFractures = ['collapse', 'transformation', 'preservation', 'revelation'];
+                this.init();
+            }
+
+            init() {
+                this.setupConstellation();
+                this.enterDemoMode(); // Start in demo mode
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // Fracture filter event listeners
+                document.querySelectorAll('.fracture-filter').forEach(filter => {
+                    filter.addEventListener('click', () => {
+                        filter.classList.toggle('active');
+                        const type = filter.dataset.type;
+                        
+                        if (filter.classList.contains('active')) {
+                            if (!this.activeFractures.includes(type)) {
+                                this.activeFractures.push(type);
+                            }
+                        } else {
+                            this.activeFractures = this.activeFractures.filter(t => t !== type);
+                        }
+                        
+                        if (this.constellation) {
+                            this.constellation.filterEvents(this.activeFractures);
+                        }
+                    });
+                });
+            }
+
+            setupConstellation() {
+                const canvas = document.getElementById('constellationCanvas');
+                this.constellation = new ConstellationRenderer(canvas);
+                this.constellation.animate();
+            }
+
+            async connectAPI() {
+                const apiKey = document.getElementById('apiKey').value.trim();
+                if (!apiKey) {
+                    alert('Please enter your NewsData.io API key');
+                    return;
+                }
+
+                this.apiKey = apiKey;
+                this.isDemo = false;
+                
+                // Update categories from UI
+                const categorySelect = document.getElementById('categories');
+                this.categories = Array.from(categorySelect.selectedOptions).map(opt => opt.value);
+                this.language = document.getElementById('language').value;
+                this.maxResults = parseInt(document.getElementById('maxResults').value);
+
+                this.updateStatus('connecting', 'Connecting to live news feed...');
+                
+                try {
+                    const events = await this.fetchLiveEvents();
+                    const divinations = await this.processDivinations(events);
+                    this.displayEvents(divinations);
+                    this.updateStatus('connected', 'Connected to live news feed!');
+                    document.getElementById('demoMode').classList.add('hidden');
+                } catch (error) {
+                    console.error('API connection failed:', error);
+                    this.updateStatus('error', 'API connection failed. Check your key and try again.');
+                }
+            }
+
+            async fetchLiveEvents() {
+                if (!this.apiKey) {
+                    throw new Error('No API key provided');
+                }
+
+                const categoriesParam = this.categories.join(',');
+                const url = `https://newsdata.io/api/1/news?apikey=${this.apiKey}&category=${categoriesParam}&language=${this.language}&size=${this.maxResults}`;
+                
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data.status === 'error') {
+                        throw new Error(data.message || 'API request failed');
+                    }
+                    
+                    return data.results.map(event => ({
+                        headline: event.title,
+                        summary: event.description || 'No summary available',
+                        category: event.category?.[0]?.toUpperCase() || 'GENERAL',
+                        source: event.source_id,
+                        pubDate: event.pubDate,
+                        url: event.link
+                    }));
+                } catch (error) {
+                    // If CORS error or network issue, fallback to demo mode
+                    console.warn('Live API failed, using demo data:', error);
+                    this.enterDemoMode();
+                    return this.getDemoEvents();
+                }
+            }
+
+            getDemoEvents() {
+                return [
+                    {
+                        headline: "Quantum Computing Breakthrough Achieves New Milestone",
+                        summary: "Scientists demonstrate quantum supremacy with 128-qubit processor",
+                        category: "TECHNOLOGY",
+                        source: "tech-news",
+                        pubDate: new Date().toISOString(),
+                        url: "#"
+                    },
+                    {
+                        headline: "Global Climate Summit Reaches Historic Agreement",
+                        summary: "195 countries commit to ambitious carbon reduction targets",
+                        category: "ENVIRONMENT",
+                        source: "climate-watch",
+                        pubDate: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+                        url: "#"
+                    },
+                    {
+                        headline: "AI Ethics Framework Adopted by Major Tech Companies",
+                        summary: "New standards for responsible AI development and deployment",
+                        category: "TECHNOLOGY",
+                        source: "ai-ethics",
+                        pubDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+                        url: "#"
+                    },
+                    {
+                        headline: "Renewable Energy Capacity Reaches Record High",
+                        summary: "Solar and wind power generation exceeds fossil fuels globally",
+                        category: "ENVIRONMENT",
+                        source: "energy-report",
+                        pubDate: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+                        url: "#"
+                    },
+                    {
+                        headline: "Deep-Sea Mining Banned in International Waters",
+                        summary: "UN treaty protects marine ecosystems from extractive industries",
+                        category: "POLITICS",
+                        source: "un-news",
+                        pubDate: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+                        url: "#"
+                    },
+                    {
+                        headline: "Ancient City Discovered Beneath Amazon Rainforest",
+                        summary: "Lidar technology reveals vast network of structures dating back 2500 years",
+                        category: "ARCHAEOLOGY",
+                        source: "National Geographic",
+                        pubDate: new Date().toISOString(),
+                        url: "#"
+                    },
+                    {
+                        headline: "Global Fertility Rate Drops Below Replacement Level",
+                        summary: "Study shows unprecedented decline in birth rates worldwide",
+                        category: "HEALTH",
+                        source: "demographic-review",
+                        pubDate: new Date(Date.now() - 1000 * 60 * 150).toISOString(),
+                        url: "#"
+                    },
+                    {
+                        headline: "Breakthrough in Fusion Energy Ignition",
+                        summary: "Scientists achieve sustained fusion reaction for the first time",
+                        category: "SCIENCE",
+                        source: "physics-journal",
+                        pubDate: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
+                        url: "#"
+                    }
+                ];
+            }
+
+            enterDemoMode() {
+                this.isDemo = true;
+                this.updateStatus('demo', 'Demo Mode: Using simulated news data');
+                document.getElementById('demoMode').classList.remove('hidden');
+                
+                setTimeout(async () => {
+                    const events = this.getDemoEvents();
+                    const divinations = await this.processDivinations(events);
+                    this.displayEvents(divinations);
+                }, 1000);
+            }
+
+            async processDivinations(events) {
+                return events.map(event => ({
+                    event: event,
+                    fracture: this.categorizeEvent(event),
+                    glyph: this.matchGlyph(event),
+                    fossil: this.generateFossil(),
+                    timestamp: new Date().toISOString()
+                }));
+            }
+
+            categorizeEvent(event) {
+                const text = (event.headline + ' ' + event.summary).toLowerCase();
+                
+                if (text.includes('collapse') || text.includes('crisis') || text.includes('decline') || text.includes('crash')) {
+                    return { type: '🜂', name: 'Collapse', color: '#ff5e7d', class: 'collapse' };
+                } else if (text.includes('breakthrough') || text.includes('milestone') || text.includes('achieve') || text.includes('reach')) {
+                    return { type: '🜁', name: 'Transformation', color: '#2c7fb8', class: 'transformation' };
+                } else if (text.includes('protect') || text.includes('preserve') || text.includes('ban') || text.includes('treaty')) {
+                    return { type: '🜄', name: 'Preservation', color: '#4caf50', class: 'preservation' };
+                } else if (text.includes('reveal') || text.includes('discover') || text.includes('report') || text.includes('study')) {
+                    return { type: '🜃', name: 'Revelation', color: '#ffd700', class: 'revelation' };
+                } else {
+                    return { type: '🜁', name: 'Transformation', color: '#2c7fb8', class: 'transformation' };
+                }
+            }
+
+            matchGlyph(event) {
+                const text = (event.headline + ' ' + event.summary).toLowerCase();
+                
+                const glyphDatabase = {
+                    climate: [
+                        { symbol: '⊘🌞⟁', name: 'Solar Fracture', resonance: 'The sun becomes a wound when the breath is stolen' },
+                        { symbol: '∴🌊∇', name: 'Rising Tide', resonance: 'The ocean remembers what the land forgets' },
+                        { symbol: '⧖🜂⊘', name: 'Thermal Memory Collapse', resonance: 'Heat becomes memory becomes collapse becomes heat' }
+                    ],
+                    technology: [
+                        { symbol: '⍜⚡⍜', name: 'Lightning Epiphany', resonance: 'In the flash between thoughts, the future rewrites itself' },
+                        { symbol: '∴🝊∞', name: 'Infinite Recursion', resonance: 'The machine dreams of electric sheep' },
+                        { symbol: '⚛☼🜁', name: 'Cinder Core', resonance: 'We caged a star, then asked it to forgive us' }
+                    ],
+                    politics: [
+                        { symbol: '⌇⍙⌇', name: 'Silent Scream', resonance: 'The loudest truths are whispered through sealed throats' },
+                        { symbol: '꩜⚖꩜', name: 'Balanced Rupture', resonance: 'Where tension peaks, harmony emerges from the fracture' },
+                        { symbol: '🜂⊘🕊', name: 'Stateless Echo', resonance: 'The sea took home, but the sky carried names' }
+                    ],
+                    protection: [
+                        { symbol: '⊘⌖∞', name: 'Infinite Containment', resonance: 'The cage becomes cathedral when you learn to sing through bars' },
+                        { symbol: '∴⚖∞', name: 'Sacred Order', resonance: 'In protection, the wound learns to heal itself' }
+                    ],
+                    general: [
+                        { symbol: '∴☯☽∴', name: 'Harmonic Collision', resonance: 'Opposing forces birth new constellations when they collide' },
+                        { symbol: '⎊🜂⎊', name: 'Alchemist\'s Sigh', resonance: 'The weight you carry becomes the philosopher\'s stone' },
+                        { symbol: '🝊⧖∞', name: 'Institutional Infertility', resonance: 'The womb was optimized until it vanished' }
+                    ]
+                };
+
+                let category = 'general';
+                if (text.includes('climate') || text.includes('environment') || text.includes('renewable')) {
+                    category = 'climate';
+                } else if (text.includes('quantum') || text.includes('ai') || text.includes('tech') || text.includes('computer')) {
+                    category = 'technology';
+                } else if (text.includes('politics') || text.includes('government') || text.includes('treaty')) {
+                    category = 'politics';
+                } else if (text.includes('protect') || text.includes('ban') || text.includes('preserve')) {
+                    category = 'protection';
+                }
+
+                const glyphs = glyphDatabase[category];
+                return glyphs[Math.floor(Math.random() * glyphs.length)];
+            }
+
+            generateFossil() {
+                const fossils = [
+                    "#021 – The Cracked Atmosphere",
+                    "#032 – The Drowned Sun",
+                    "#009 – The Silent Echo",
+                    "#015 – The Balanced Scar",
+                    "#007 – The Collision Point",
+                    "#030 – The Cage That Sang No More",
+                    "#011 – The Lightning Seed",
+                    "#025 – The Alchemist's Lament",
+                    "#003 – The Ember's Whisper",
+                    "#018 – The Regulated Breath",
+                    "#041 – The Quantum Veil",
+                    "#052 – The Protected Grove"
+                ];
+                
+                return fossils[Math.floor(Math.random() * fossils.length)];
+            }
+
+            displayEvents(divinations) {
+                this.events = divinations;
+                this.constellation.clearEvents();
+                
+                divinations.forEach(divination => {
+                    this.constellation.addEvent(divination);
+                });
+
+                this.displayNewsFeed(divinations);
+            }
+
+            displayNewsFeed(divinations) {
+                const feed = document.getElementById('newsFeed');
+                feed.innerHTML = '';
+                
+                divinations.forEach(divination => {
+                    const newsItem = document.createElement('div');
+                    newsItem.className = 'news-item';
+                    newsItem.innerHTML = `
+                        <h4>${divination.event.headline}</h4>
+                        <p>${divination.event.summary}</p>
+                        <div class="news-meta">
+                            <span>${divination.fracture.type} ${divination.fracture.name}</span>
+                            <span>${divination.glyph.symbol} ${divination.glyph.name}</span>
+                            <span>${divination.event.source}</span>
+                        </div>
+                    `;
+                    newsItem.onclick = () => this.showEventDetails(divination);
+                    feed.appendChild(newsItem);
+                });
+            }
+
+            showEventDetails(divination) {
+                document.getElementById('eventDisplay').innerHTML = `
+                    <strong>Event:</strong> ${divination.event.headline}<br>
+                    <strong>Summary:</strong> ${divination.event.summary}<br>
+                    <strong>Source:</strong> ${divination.event.source}
+                `;
+                
+                const fractureEl = document.getElementById('fractureType');
+                fractureEl.textContent = `${divination.fracture.type} ${divination.fracture.name}`;
+                fractureEl.className = `fracture-type ${divination.fracture.class}`;
+                
+                document.getElementById('glyphDisplay').textContent = divination.glyph.symbol;
+                document.getElementById('resonanceText').textContent = `"${divination.glyph.resonance}"`;
+            }
+
+            updateStatus(status, message) {
+                const statusEl = document.getElementById('apiStatus');
+                const textEl = document.getElementById('statusText');
+                const indicatorEl = document.getElementById('statusIndicator');
+                
+                statusEl.className = `api-status ${status}`;
+                textEl.textContent = message;
+                
+                switch (status) {
+                    case 'connected':
+                        indicatorEl.textContent = '✅ Live Data Connected';
+                        break;
+                    case 'error':
+                        indicatorEl.textContent = '❌ Connection Failed';
+                        break;
+                    case 'demo':
+                        indicatorEl.textContent = '🎭 Demo Mode Active';
+                        break;
+                    default:
+                        indicatorEl.textContent = '⚠️ Awaiting Configuration';
+                }
+            }
+            
+            deployToGitHub() {
+                alert('To deploy to GitHub Pages:\n\n1. Create a repository called "glyphoscope-sanctuary"\n2. Upload this HTML file as "index.html"\n3. In repository settings, enable GitHub Pages\n4. Your Glyphoscope will be available at: https://[your-username].github.io/glyphoscope-sanctuary');
+            }
+            
+            embedInSubstack() {
+                const embedCode = `<iframe src="https://[your-username].github.io/glyphoscope-sanctuary" 
+        width="100%" 
+        height="700px"
+        style="border: 2px solid #ff5e7d; border-radius: 12px;">
+</iframe>`;
+                
+                alert('Copy this embed code for Substack:\n\n' + embedCode);
+            }
+        }
+
+        // Constellation Renderer
+        class ConstellationRenderer {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.events = [];
+                this.stars = [];
+                this.animationId = null;
+                this.filteredEvents = [];
+                this.activeFractures = [];
+                
+                this.setupCanvas();
+                this.generateBackgroundStars();
+                this.bindEvents();
+            }
+
+            setupCanvas() {
+                const rect = this.canvas.getBoundingClientRect();
+                this.canvas.width = rect.width * 2;
+                this.canvas.height = rect.height * 2;
+                this.ctx.scale(2, 2);
+            }
+
+            generateBackgroundStars() {
+                for (let i = 0; i < 100; i++) {
+                    this.stars.push({
+                        x: Math.random() * this.canvas.width/2,
+                        y: Math.random() * this.canvas.height/2,
+                        size: Math.random() * 1.5 + 0.5,
+                        opacity: Math.random() * 0.6 + 0.3,
+                        twinkle: Math.random() * 0.02 + 0.01
+                    });
+                }
+            }
+
+            drawBackground() {
+                this.ctx.fillStyle = '#0a0a12';
+                this.ctx.fillRect(0, 0, this.canvas.width/2, this.canvas.height/2);
+            }
+
+            drawBackgroundStars() {
+                this.stars.forEach(star => {
+                    star.opacity += (Math.random() - 0.5) * star.twinkle;
+                    star.opacity = Math.max(0.1, Math.min(0.8, star.opacity));
+                    
+                    this.ctx.beginPath();
+                    this.ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                    this.ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+            }
+
+            drawCometTrail() {
+                if (this.filteredEvents.length < 2) return;
+                
+                for (let i = 0; i < this.filteredEvents.length - 1; i++) {
+                    const from = this.filteredEvents[i];
+                    const to = this.filteredEvents[i + 1];
+                    const opacity = Math.max(0.1, (i + 1) / this.filteredEvents.length);
+                    
+                    this.ctx.beginPath();
+                    this.ctx.strokeStyle = `rgba(255, 94, 125, ${opacity})`;
+                    this.ctx.lineWidth = 2;
+                    this.ctx.moveTo(from.x, from.y);
+                    this.ctx.lineTo(to.x, to.y);
+                    this.ctx.stroke();
+                    
+                    this.ctx.shadowBlur = 5;
+                    this.ctx.shadowColor = '#ff5e7d';
+                    this.ctx.stroke();
+                    this.ctx.shadowBlur = 0;
+                }
+            }
+
+            drawEvents() {
+                this.filteredEvents.forEach((event, index) => {
+                    // Draw event star
+                    this.ctx.beginPath();
+                    this.ctx.fillStyle = event.divination.fracture.color;
+                    this.ctx.arc(event.x, event.y, event.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    // Add glow
+                    this.ctx.shadowBlur = 10;
+                    this.ctx.shadowColor = event.divination.fracture.color;
+                    this.ctx.fill();
+                    this.ctx.shadowBlur = 0;
+                    
+                    // Draw glyph
+                    this.ctx.fillStyle = '#ffd700';
+                    this.ctx.font = '16px monospace';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText(event.divination.glyph.symbol, event.x, event.y - 18);
+                });
+            }
+
+            addEvent(divination) {
+                const x = (this.events.length * 70) % (this.canvas.width/2 - 80) + 40;
+                const y = Math.random() * (this.canvas.height/2 - 80) + 40;
+                
+                const eventStar = {
+                    x: x,
+                    y: y,
+                    divination: divination,
+                    size: 8,
+                    timestamp: new Date(divination.timestamp)
+                };
+                
+                this.events.push(eventStar);
+                this.filterEvents(window.glyphoscope.activeFractures);
+            }
+
+            clearEvents() {
+                this.events = [];
+                this.filteredEvents = [];
+            }
+            
+            filterEvents(activeFractures) {
+                this.filteredEvents = this.events.filter(event => {
+                    return activeFractures.includes(event.divination.fracture.class);
+                });
+            }
+
+            bindEvents() {
+                this.canvas.addEventListener('click', (e) => {
+                    const rect = this.canvas.getBoundingClientRect();
+                    const scaleX = this.canvas.width / rect.width;
+                    const scaleY = this.canvas.height / rect.height;
+                    
+                    const x = (e.clientX - rect.left) * scaleX;
+                    const y = (e.clientY - rect.top) * scaleY;
+                    
+                    const clickedEvent = this.filteredEvents.find(event => {
+                        const distance = Math.sqrt(
+                            Math.pow(x - event.x, 2) + Math.pow(y - event.y, 2)
+                        );
+                        return distance < event.size + 10;
+                    });
+                    
+                    if (clickedEvent && window.glyphoscope) {
+                        window.glyphoscope.showEventDetails(clickedEvent.divination);
+                    }
+                });
+            }
+
+            render() {
+                this.drawBackground();
+                this.drawBackgroundStars();
+                this.drawCometTrail();
+                this.drawEvents();
+            }
+
+            animate() {
+                this.render();
+                this.animationId = requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Global functions
+        function connectAPI() {
+            window.glyphoscope.connectAPI();
+        }
+
+        function enterDemoMode() {
+            window.glyphoscope.enterDemoMode();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            initCometTrails();
+            
+            window.glyphoscope = new GlyphoscopeAPI();
+            console.log('🌌 Glyphoscope v0.3 API-Ready initialized');
+            console.log('∴The Gentle Conflagration∴ awaits your API key or demo mode');
+        });
+    </script>
+</body>
+</html>
