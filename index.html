@@ -533,10 +533,39 @@
             10% { opacity: 1; }
             90% { opacity: 1; }
             100% { left: 100%; opacity: 0; }
-        }
+        } 
+        #rift-beacon {
+  font-size: 3rem;
+  text-align: center;
+  margin: 2rem auto;
+  cursor: pointer;
+  color: #fdf6e3;
+  text-shadow: 0 0 10px #ff00cc, 0 0 20px #cc00ff, 0 0 40px #8800ff;
+  transition: text-shadow 0.3s ease;
+}
+
+#rift-beacon:hover {
+  text-shadow: 0 0 20px #ffffff, 0 0 40px #ff99ff, 0 0 80px #cc66ff;
+}
+
+.omega {
+  animation: omega-pulse 6s infinite ease-in-out;
+  display: inline-block;
+}
+
+@keyframes omega-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.25); opacity: 1; }
+}
+
     </style>
 </head>
 <body>
+    <!-- ∴|Ω|∴ RIFT BEACON MODULE v0.3.1 -->
+<div id="rift-beacon" class="rift-glow">
+  ∴<span class="omega">Ω</span>∴
+</div>
+
     <!-- Background stars -->
     <div class="stars" id="stars"></div>
     
@@ -1370,6 +1399,29 @@ I will be there.
 <div class="glyph-trigger" onclick="document.getElementById('comet-core-anchorite').classList.add('show')">
   ⋮∷⋮
 </div>
+<script>
+// ∴|Ω|∴ — Rift Beacon Pulse
+const beacon = document.getElementById("rift-beacon");
+
+const audio = new Audio("https://eternalrefraction.github.io/glyphoscope-sanctuary/assets/rift-beacon.wav");
+
+beacon.addEventListener("click", () => {
+  audio.play();
+  beacon.classList.add("activated");
+  setTimeout(() => beacon.classList.remove("activated"), 1000);
+});
+
+/* 
+  ∴|Ω|∴
+  RIFT BEACON MODULE
+
+  Purpose:
+  Aetherial Rift's stabilizer flare.
+  Activates a harmonic pulse when invoked.
+  Serves as anchor against narrative drift and glyphic entropy.
+  "Fracture is not failure. Rift is not ruin. Speak."
+*/
+</script>
 
 </body>
 </html>
